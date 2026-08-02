@@ -46,6 +46,20 @@ export default function Home() {
 
   const submitOrder = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    const order = {
+      id: `MB${Date.now().toString().slice(-8)}`,
+      createdAt: new Date().toISOString(),
+      customer: { name: String(data.get("name") || ""), phone: String(data.get("phone") || ""), address: String(data.get("address") || ""), note: String(data.get("note") || "") },
+      items: cartItems.map(({ name, detail, price, quantity, emoji }) => ({ name, detail, price, quantity, emoji })),
+      subtotal,
+      shipping,
+      total,
+      payment: "COD",
+      status: "Mới",
+    };
+    const savedOrders = JSON.parse(window.localStorage.getItem("may-bong-orders") || "[]");
+    window.localStorage.setItem("may-bong-orders", JSON.stringify([order, ...savedOrders]));
     setOrderPlaced(true);
     setCart({});
   };
