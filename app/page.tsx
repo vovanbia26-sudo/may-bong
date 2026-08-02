@@ -3,10 +3,10 @@
 import { useState } from "react";
 
 const products = [
-  { name: "Gấu Mơ Màng", detail: "Màu kem · 55cm", price: "459.000đ", tag: "BÁN CHẠY", emoji: "🧸", tone: "cream" },
-  { name: "Thỏ Bông Má Hồng", detail: "Màu hồng · 45cm", price: "389.000đ", tag: "MỚI", emoji: "🐰", tone: "pink" },
-  { name: "Capybara Ú Nu", detail: "Màu nâu · 40cm", price: "329.000đ", tag: "HOT", emoji: "🤎", tone: "brown" },
-  { name: "Gấu Dâu Ngọt Ngào", detail: "Màu dâu · 50cm", price: "419.000đ", tag: "-15%", emoji: "🍓", tone: "berry" },
+  { name: "Gấu Mơ Màng", detail: "Màu kem · 55cm", description: "Bé gấu lông kem êm mịn, bụng tròn dễ ôm và vừa vặn để đồng hành trong những giấc ngủ thật ngon.", price: "459.000đ", tag: "BÁN CHẠY", emoji: "🧸", tone: "cream" },
+  { name: "Thỏ Bông Má Hồng", detail: "Màu hồng · 45cm", description: "Đôi tai dài mềm mại cùng đôi má hồng đáng yêu, là món quà ngọt ngào dành cho bé và người thương.", price: "389.000đ", tag: "MỚI", emoji: "🐰", tone: "pink" },
+  { name: "Capybara Ú Nu", detail: "Màu nâu · 40cm", description: "Dáng tròn ú nu, gương mặt thư thái và lớp bông đàn hồi giúp mọi khoảnh khắc nghỉ ngơi thêm dễ chịu.", price: "329.000đ", tag: "HOT", emoji: "🤎", tone: "brown" },
+  { name: "Gấu Dâu Ngọt Ngào", detail: "Màu dâu · 50cm", description: "Một chiếc ôm thơm màu dâu với chất bông cao cấp, mềm xốp và nổi bật trong mọi góc phòng.", price: "419.000đ", tag: "-15%", emoji: "🍓", tone: "berry" },
 ];
 
 const categories = [
@@ -69,7 +69,7 @@ export default function Home() {
       <section className="products" id="shop">
         <div className="section-heading"><div><p className="eyebrow">ĐƯỢC YÊU THÍCH NHẤT</p><h2>Những chiếc ôm bán chạy</h2></div><p className="section-note">Mỗi bạn bông đều được kiểm tra bằng tay trước khi đến với bạn.</p></div>
         <div className="product-grid">
-          {products.map((item) => <article className="product-card" key={item.name}><div className={`product-art ${item.tone}`}><span className="tag">{item.tag}</span><button className="favorite" aria-label={`Yêu thích ${item.name}`}>♡</button><div className="product-emoji">{item.emoji}</div></div><div className="product-info"><div><h3>{item.name}</h3><p>{item.detail}</p></div><strong>{item.price}</strong></div><button className="add" onClick={() => addToCart(item.name)}>Thêm vào giỏ <span>＋</span></button></article>)}
+          {products.map((item) => <article className="product-card" key={item.name}><div className={`product-art ${item.tone}`}><span className="tag">{item.tag}</span><button className="favorite" aria-label={`Yêu thích ${item.name}`}>♡</button><div className="product-emoji">{item.emoji}</div></div><div className="product-info"><div><h3>{item.name}</h3><p>{item.detail}</p></div><strong>{item.price}</strong></div><p className="product-description">{item.description}</p><button className="add" onClick={() => addToCart(item.name)}>Thêm vào giỏ <span>＋</span></button></article>)}
         </div>
       </section>
 

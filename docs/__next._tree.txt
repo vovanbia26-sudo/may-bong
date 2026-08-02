@@ -1,2 +1,2 @@
-:HL["/may-bong/_next/static/chunks/16wzz_pwc9qx4.css","style"]
-0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}},"staleTime":300,"buildId":"kX7VS2cUqg1_ejIWheoFc"}
+:HL["/may-bong/_next/static/chunks/0m8d5o_o72fvy.css","style"]
+0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}},"staleTime":300,"buildId":"jbzPBxUlNUMDqoOSSnBoe"}
