@@ -3,10 +3,10 @@
 import { useState } from "react";
 
 const products = [
-  { name: "Gấu Mơ Màng", detail: "Màu kem · 55cm", description: "Bé gấu lông kem êm mịn, bụng tròn dễ ôm và vừa vặn để đồng hành trong những giấc ngủ thật ngon.", price: "459.000đ", tag: "BÁN CHẠY", emoji: "🧸", tone: "cream" },
-  { name: "Thỏ Bông Má Hồng", detail: "Màu hồng · 45cm", description: "Đôi tai dài mềm mại cùng đôi má hồng đáng yêu, là món quà ngọt ngào dành cho bé và người thương.", price: "389.000đ", tag: "MỚI", emoji: "🐰", tone: "pink" },
-  { name: "Capybara Ú Nu", detail: "Màu nâu · 40cm", description: "Dáng tròn ú nu, gương mặt thư thái và lớp bông đàn hồi giúp mọi khoảnh khắc nghỉ ngơi thêm dễ chịu.", price: "329.000đ", tag: "HOT", emoji: "🤎", tone: "brown" },
-  { name: "Gấu Dâu Ngọt Ngào", detail: "Màu dâu · 50cm", description: "Một chiếc ôm thơm màu dâu với chất bông cao cấp, mềm xốp và nổi bật trong mọi góc phòng.", price: "419.000đ", tag: "-15%", emoji: "🍓", tone: "berry" },
+  { name: "Gấu Mơ Màng", detail: "Màu kem · 55cm", description: "Bé gấu lông kem êm mịn, bụng tròn dễ ôm và vừa vặn để đồng hành trong những giấc ngủ thật ngon.", price: 459000, tag: "BÁN CHẠY", emoji: "🧸", tone: "cream" },
+  { name: "Thỏ Bông Má Hồng", detail: "Màu hồng · 45cm", description: "Đôi tai dài mềm mại cùng đôi má hồng đáng yêu, là món quà ngọt ngào dành cho bé và người thương.", price: 389000, tag: "MỚI", emoji: "🐰", tone: "pink" },
+  { name: "Capybara Ú Nu", detail: "Màu nâu · 40cm", description: "Dáng tròn ú nu, gương mặt thư thái và lớp bông đàn hồi giúp mọi khoảnh khắc nghỉ ngơi thêm dễ chịu.", price: 329000, tag: "HOT", emoji: "🤎", tone: "brown" },
+  { name: "Gấu Dâu Ngọt Ngào", detail: "Màu dâu · 50cm", description: "Một chiếc ôm thơm màu dâu với chất bông cao cấp, mềm xốp và nổi bật trong mọi góc phòng.", price: 419000, tag: "-15%", emoji: "🍓", tone: "berry" },
 ];
 
 const categories = [
@@ -17,13 +17,37 @@ const categories = [
 ];
 
 export default function Home() {
-  const [cart, setCart] = useState(0);
+  const [cart, setCart] = useState<Record<string, number>>({});
   const [notice, setNotice] = useState("");
+  const [checkoutOpen, setCheckoutOpen] = useState(false);
+  const [orderPlaced, setOrderPlaced] = useState(false);
+
+  const formatPrice = (value: number) => `${value.toLocaleString("vi-VN")}đ`;
+  const cartItems = products.filter((item) => cart[item.name]).map((item) => ({ ...item, quantity: cart[item.name] }));
+  const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+  const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const shipping = subtotal >= 499000 || subtotal === 0 ? 0 : 30000;
+  const total = subtotal + shipping;
 
   const addToCart = (name: string) => {
-    setCart((value) => value + 1);
+    setCart((value) => ({ ...value, [name]: (value[name] || 0) + 1 }));
     setNotice(`${name} đã vào giỏ hàng!`);
     window.setTimeout(() => setNotice(""), 2200);
+  };
+
+  const changeQuantity = (name: string, amount: number) => {
+    setCart((current) => {
+      const next = Math.max(0, (current[name] || 0) + amount);
+      const updated = { ...current };
+      if (next === 0) delete updated[name]; else updated[name] = next;
+      return updated;
+    });
+  };
+
+  const submitOrder = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setOrderPlaced(true);
+    setCart({});
   };
 
   return (
@@ -36,7 +60,7 @@ export default function Home() {
           <a href="#shop">Cửa hàng</a><a href="#collections">Bộ sưu tập</a><a href="#gift">Quà tặng</a><a href="#story">Câu chuyện</a>
         </div>
         <div className="nav-actions">
-          <button aria-label="Tìm kiếm">⌕</button><button aria-label="Tài khoản">♙</button><button className="cart-button" aria-label={`Giỏ hàng có ${cart} sản phẩm`}>Túi <b>{cart}</b></button>
+          <button aria-label="Tìm kiếm">⌕</button><button aria-label="Tài khoản">♙</button><button className="cart-button" onClick={() => { setOrderPlaced(false); setCheckoutOpen(true); }} aria-label={`Giỏ hàng có ${cartCount} sản phẩm`}>Túi <b>{cartCount}</b></button>
         </div>
       </nav>
 
@@ -69,9 +93,22 @@ export default function Home() {
       <section className="products" id="shop">
         <div className="section-heading"><div><p className="eyebrow">ĐƯỢC YÊU THÍCH NHẤT</p><h2>Những chiếc ôm bán chạy</h2></div><p className="section-note">Mỗi bạn bông đều được kiểm tra bằng tay trước khi đến với bạn.</p></div>
         <div className="product-grid">
-          {products.map((item) => <article className="product-card" key={item.name}><div className={`product-art ${item.tone}`}><span className="tag">{item.tag}</span><button className="favorite" aria-label={`Yêu thích ${item.name}`}>♡</button><div className="product-emoji">{item.emoji}</div></div><div className="product-info"><div><h3>{item.name}</h3><p>{item.detail}</p></div><strong>{item.price}</strong></div><p className="product-description">{item.description}</p><button className="add" onClick={() => addToCart(item.name)}>Thêm vào giỏ <span>＋</span></button></article>)}
+          {products.map((item) => <article className="product-card" key={item.name}><div className={`product-art ${item.tone}`}><span className="tag">{item.tag}</span><button className="favorite" aria-label={`Yêu thích ${item.name}`}>♡</button><div className="product-emoji">{item.emoji}</div></div><div className="product-info"><div><h3>{item.name}</h3><p>{item.detail}</p></div><strong>{formatPrice(item.price)}</strong></div><p className="product-description">{item.description}</p><button className="add" onClick={() => addToCart(item.name)}>Thêm vào giỏ <span>＋</span></button></article>)}
         </div>
       </section>
+
+      {checkoutOpen && <div className="cart-overlay" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) setCheckoutOpen(false); }}>
+        <section className="cart-panel" role="dialog" aria-modal="true" aria-labelledby="cart-title">
+          <div className="cart-head"><div><p className="eyebrow">CHIẾC ÔM CỦA BẠN</p><h2 id="cart-title">Giỏ hàng</h2></div><button className="cart-close" onClick={() => setCheckoutOpen(false)} aria-label="Đóng giỏ hàng">×</button></div>
+          {orderPlaced ? <div className="order-success"><span>✓</span><h3>Đặt hàng thành công!</h3><p>Mây Bông đã nhận được đơn hàng. Chúng mình sẽ gọi xác nhận và giao chiếc ôm đến bạn sớm nhất.</p><button className="primary" onClick={() => setCheckoutOpen(false)}>Tiếp tục mua sắm</button></div> : cartItems.length === 0 ? <div className="cart-empty"><span>🧸</span><h3>Giỏ hàng đang trống</h3><p>Hãy chọn một người bạn bông thật đáng yêu nhé.</p><button className="primary" onClick={() => setCheckoutOpen(false)}>Chọn sản phẩm</button></div> : <form className="checkout" onSubmit={submitOrder}>
+            <div className="cart-list">
+              {cartItems.map((item) => <div className="cart-item" key={item.name}><div className={`cart-thumb ${item.tone}`}>{item.emoji}</div><div className="cart-item-copy"><h3>{item.name}</h3><p>{item.detail}</p><strong>{formatPrice(item.price)}</strong><div className="quantity"><button type="button" onClick={() => changeQuantity(item.name, -1)} aria-label={`Giảm số lượng ${item.name}`}>−</button><span>{item.quantity}</span><button type="button" onClick={() => changeQuantity(item.name, 1)} aria-label={`Tăng số lượng ${item.name}`}>＋</button><button type="button" className="remove" onClick={() => changeQuantity(item.name, -item.quantity)}>Xóa</button></div></div></div>)}
+            </div>
+            <div className="checkout-form"><h3>Thông tin nhận hàng</h3><div className="form-grid"><label>Họ và tên<input name="name" required placeholder="Nguyễn Minh Anh" /></label><label>Số điện thoại<input name="phone" type="tel" required pattern="[0-9 +]{9,15}" placeholder="0901 234 567" /></label><label className="full">Địa chỉ giao hàng<input name="address" required placeholder="Số nhà, đường, phường/xã, quận/huyện, tỉnh/thành" /></label><label className="full">Ghi chú<textarea name="note" rows={2} placeholder="Thời gian nhận hàng hoặc lời nhắn cho shop" /></label></div><h3>Thanh toán</h3><label className="payment-option"><input type="radio" name="payment" defaultChecked /><span><b>Thanh toán khi nhận hàng (COD)</b><small>Kiểm tra kiện hàng và thanh toán cho nhân viên giao hàng.</small></span></label></div>
+            <div className="cart-summary"><div><span>Tạm tính</span><b>{formatPrice(subtotal)}</b></div><div><span>Phí giao hàng</span><b>{shipping === 0 ? "Miễn phí" : formatPrice(shipping)}</b></div><div className="total"><span>Tổng thanh toán</span><strong>{formatPrice(total)}</strong></div><button className="place-order" type="submit">Xác nhận đặt hàng · {formatPrice(total)}</button><p>Bằng việc đặt hàng, bạn đồng ý với chính sách giao hàng và đổi trả của Mây Bông.</p></div>
+          </form>}
+        </section>
+      </div>}
 
       <section className="gift" id="gift">
         <div className="gift-art"><span className="gift-box">🎁</span><span className="gift-spark">✦</span><span className="gift-heart">♥</span></div>
