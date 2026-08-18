@@ -134,7 +134,7 @@ export default function Home() {
       </section>
 
       <footer><div className="footer-brand"><a className="brand" href="#top"><span className="brand-mark">mb</span>Mây Bông</a><p>Những chiếc ôm mềm mại,<br/>gửi từ trái tim đến trái tim.</p></div><div><h4>Khám phá</h4><a href="#shop">Sản phẩm mới</a><a href="#shop">Bán chạy</a><a href="#gift">Hộp quà</a></div><div><h4>Hỗ trợ</h4><a href="#">Giao hàng</a><a href="#">Đổi trả</a><a href="#">Chăm sóc gấu</a></div><div className="newsletter"><h4>Nhận thư từ Mây</h4><p>Ưu đãi nhỏ và những câu chuyện đáng yêu.</p><form onSubmit={(e)=>{e.preventDefault();setNotice("Cảm ơn bạn đã đăng ký nhận tin!")}}><input type="email" required placeholder="Email của bạn" aria-label="Email"/><button>→</button></form></div></footer>
-      <div className="copyright">© 2026 Mây Bông. Một thương hiệu nhỏ đầy yêu thương. <span>Instagram · TikTok · Facebook</span></div>
+      <div className="copyright">© 2026 Mây Bông. Một thương hiệu nhỏ đầy yêu thương. <span><a href="mailto:hoanggiabaon905@gmail.com">hoanggiabaon905@gmail.com</a> · Instagram · TikTok · Facebook</span></div>
     </main>
   );
 }

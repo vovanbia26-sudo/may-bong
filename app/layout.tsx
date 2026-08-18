@@ -3,6 +3,9 @@ import Script from "next/script";
 import "./globals.css";
 
 export const metadata: Metadata = {
+  authors: [{ name: "Mây Bông", url: "mailto:hoanggiabaon905@gmail.com" }],
+  creator: "hoanggiabaon905@gmail.com",
+  publisher: "Mây Bông",
   title: "Mây Bông — Một cái ôm cho mọi ngày",
   description: "Cửa hàng gấu bông mềm mại, an toàn và đáng yêu. Gói quà miễn phí, giao hàng toàn quốc.",
   icons: {
